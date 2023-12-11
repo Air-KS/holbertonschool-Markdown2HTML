@@ -6,7 +6,6 @@ Task 0: convert heading
 
 from os.path import isfile
 import sys
-import os
 
 
 def file_exist(argv):
@@ -25,7 +24,6 @@ def file_exist(argv):
         print("Missing " + argv[1], file=sys.stderr)
         sys.exit(1)
 
-    sys.exit(0)
 
 
 def markdown_to_html(md_file, html_file):
