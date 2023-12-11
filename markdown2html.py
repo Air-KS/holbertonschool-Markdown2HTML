@@ -1,63 +1,59 @@
 #!/usr/bin/python3
 """
 Markdown to HTML Converter
-Task 0: convert heading
+convert heading
 """
 
 from os.path import isfile
 import sys
 
-
 def file_exist(argv):
-    """Verify if the necessary files exist and if the correct number of arguments are provided.
-
-    Args:
-        argv (list of str): Command line arguments where argv[1] is the source Markdown file
-                            and argv[2] is the destination HTML file.
-    """
+    """Verify if the necessary files exist and if the correct number of arguments are provided."""
     if len(argv) < 3:
-        print("Usage: ./markdown2html.py README.md README.html",
-              file=sys.stderr)
+        print("Usage: ./markdown2html.py README.md README.html", file=sys.stderr)
         sys.exit(1)
 
-    if isfile(argv[1]) is False:
+    if not isfile(argv[1]):
         print("Missing " + argv[1], file=sys.stderr)
         sys.exit(1)
 
-
-
 def markdown_to_html(md_file, html_file):
-    """Defines a function to convert a Markdown file to HTML.
-
-    md_file: path to the Markdown file to convert.
-    html_file: path to the output HTML file.
-    """
+    """Converts a Markdown file to HTML."""
     try:
         with open(md_file, 'r') as f:
-            lines = f.readlines(0)
+            lines = f.readlines()  # Corrigé pour lire toutes les lignes
 
         with open(html_file, 'w') as f:
-            """
-            Opens the HTML file for writing.
-            Any existing content will be replaced.
-            """
+            in_list = False  # Initialisation de in_list
 
             for index in lines:
                 index = index.strip()
 
                 if index.startswith('#'):
-                    """
-                    If the line is a Markdown title
-                    (starts with '#'), convert.
-                    """
                     level = index.count('#')
                     heading = index.strip('#').strip()
                     html_heading = f'<h{level}>{heading}</h{level}>'
                     f.write(html_heading + '\n')
+
+                elif index.startswith('-'):
+                    if not in_list:
+                        f.write('<ul>\n')
+                        in_list = True
+                    list_item = index.strip('-').strip()
+                    f.write(f'<li>{list_item}</li>\n') # Create a list item
+
+                else:
+                    if in_list:
+                        f.write('</ul>\n')
+                        in_list = False
+
+            # Close the <ul> tag if the list has not been closed.
+            if in_list:
+                f.write('</ul>\n')
+
     except IOError as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
-
 
 if __name__ == "__main__":
     file_exist(sys.argv)
