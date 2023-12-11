@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 """Scritp that convert markdown to html"""
 
 from os.path import isfile
@@ -7,7 +7,7 @@ import markdown
 
 
 def fileExist(argv):
-    """varify file
+    """verify file
 
     argv (str): 2 arguments string
     """
@@ -20,6 +20,7 @@ def fileExist(argv):
         print("Missing " + argv[1], file=sys.stderr)
         exit(1)
 
+    exit(0)
 
 if __name__ == "__main__":
     fileExist(sys.argv)
