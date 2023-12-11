@@ -6,7 +6,7 @@ import sys
 import markdown
 
 
-def fileExist(argv):
+def file_exist(argv):
     """Verify if the necessary files exist and if the correct number of arguments are provided.
     
     Args:
@@ -16,16 +16,16 @@ def fileExist(argv):
     if len(argv) < 3:
         print("Usage: ./markdown2html.py README.md README.html",
               file=sys.stderr)
-        exit(1)
+        sys.exit(1)
 
     if isfile(argv[1]) is False:
         print("Missing " + argv[1], file=sys.stderr)
-        exit(1)
+        sys.exit(1)
 
-    exit(0)
+    sys.exit(0)
 
 
-def markdownToHtml(argv):
+def markdown_html(argv):
     """Convert the content of a Markdown file to HTML and save it to a specified file.
     
     Args: argv (list of str): Command line arguments where argv[1] is the source Markdown file
@@ -37,9 +37,9 @@ def markdownToHtml(argv):
     html_string = markdown.markdown(markdown_string)
 
     with open(argv[2], 'w') as new_file:
-        new_file.write(htmk_string)
+        new_file.write(html_string)
 
 
 if __name__ == "__main__":
-    fileExist(sys.argv)
-    markdownToHtml(sys.argv)
+    file_exist(sys.argv)
+    markdown_html(sys.argv)
