@@ -9,7 +9,7 @@ import markdown
 def fileExist(argv):
     """varify file
 
-    argv (str)
+    argv (str): 2 arguments string
     """
     if len(argv) < 3:
         print("Usage: ./markdown2html.py README.md README.html",
@@ -19,8 +19,6 @@ def fileExist(argv):
     if isfile(argv[1]) is False:
         print("Missing " + argv[1], file=sys.stderr)
         exit(1)
-
-    exit(0)
 
 
 if __name__ == "__main__":
