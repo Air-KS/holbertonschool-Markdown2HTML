@@ -53,7 +53,7 @@ def markdown_to_html(md_file, html_file):
                 """
                 level = index.count('#')
                 heading = index.strip('#').strip()
-                html_heading = f'<h{level}>{heading}/h{level}>'
+                html_heading = f'<h{level}>{heading}</h{level}>'
                 f.write(html_heading + '\n')
 
 
