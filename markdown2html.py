@@ -24,45 +24,58 @@ def markdown_to_html(md_file, html_file):
             lines = f.readlines()
 
         with open(html_file, 'w') as f:
-            in_ul = False  # For unordered lists
-            in_ol = False  # For ordered lists
+            in_ul = False # For unordered lists
+            in_ol = False # For ordered lists
+            in_para = False # for paragraph
+            
+            for index in range(len(lines)):
+                line = lines[index].rstrip("\n")
+                next_line = lines[index + 1].rstrip("\n") if index + 1 < len(lines) else ''
+                
+                if line == '' and not in_para:
+                    continue
 
-            for index in lines:
-                index = index.strip()
-
-                if index.startswith('#'):
-                    level = index.count('#')
-                    heading = index.strip('#').strip()
-                    html_heading = f'<h{level}>{heading}</h{level}>'
-                    f.write(html_heading + '\n')
-
-                elif index.startswith('-'):
-                    if not in_ul:
-                        f.write('<ul>\n')
-                        in_ul = True
-                    list_item = index.strip('-').strip()
-                    f.write(f'<li>{list_item}</li>\n')
-
-                elif index.startswith('*'):
-                    if not in_ol:
-                        f.write('<ol>\n')
-                        in_ol = True
-                    list_item = index.strip('*').strip()
-                    f.write(f'<li>{list_item}</li>\n')
-
-                else:
+                if line.startswith('#'):
+                    if in_para:
+                        f.write('</p>\n')
+                        in_para = False
                     if in_ul:
                         f.write('</ul>\n')
                         in_ul = False
                     if in_ol:
                         f.write('</ol>\n')
                         in_ol = False
+                        
+                    level = line.count('#')
+                    heading = line.strip('#').strip()
+                    html_heading = f'<h{level}>{heading}</h{level}>'
+                    f.write(html_heading + '\n')
 
-            # Close list tags
-            if in_ul:
-                f.write('</ul>\n')
-            if in_ol:
-                f.write('</ol>\n')
+                elif line.startswith('-'):
+                    if not in_ul:
+                        f.write('<ul>\n')
+                        in_ul = True
+                    list_item = line.strip('-').strip()
+                    f.write(f'<li>{list_item}</li>\n')
+
+                elif line.startswith('*'):
+                    if not in_ol:
+                        f.write('<ol>\n')
+                        in_ol = True
+                    list_item = line.strip('*').strip()
+                    f.write(f'<li>{list_item}</li>\n')
+
+                else:
+                    if not in_para:
+                        f.write('<p>\n')
+                        in_para = True
+                    if next_line == '' or next_line.startswith('#') or next_line.startswith('-') or next_line.startswith('*'):
+                        f.write(f'{line}\n')
+                        if in_para:
+                            f.write('</p>\n')
+                            in_para = False
+                    else:
+                        f.write(f'{line}<br/>\n')
 
     except IOError as e:
         print(f"Error: {e}", file=sys.stderr)
