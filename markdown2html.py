@@ -21,10 +21,11 @@ def markdown_to_html(md_file, html_file):
     """Converts a Markdown file to HTML."""
     try:
         with open(md_file, 'r') as f:
-            lines = f.readlines()  # Corrigé pour lire toutes les lignes
+            lines = f.readlines()
 
         with open(html_file, 'w') as f:
-            in_list = False  # Initialisation de in_list
+            in_ul = False  # For unordered lists
+            in_ol = False  # For ordered lists
 
             for index in lines:
                 index = index.strip()
@@ -36,20 +37,32 @@ def markdown_to_html(md_file, html_file):
                     f.write(html_heading + '\n')
 
                 elif index.startswith('-'):
-                    if not in_list:
+                    if not in_ul:
                         f.write('<ul>\n')
-                        in_list = True
+                        in_ul = True
                     list_item = index.strip('-').strip()
-                    f.write(f'<li>{list_item}</li>\n') # Create a list item
+                    f.write(f'<li>{list_item}</li>\n')
+
+                elif index.startswith('*'):
+                    if not in_ol:
+                        f.write('<ol>\n')
+                        in_ol = True
+                    list_item = index.strip('*').strip()
+                    f.write(f'<li>{list_item}</li>\n')
 
                 else:
-                    if in_list:
+                    if in_ul:
                         f.write('</ul>\n')
-                        in_list = False
+                        in_ul = False
+                    if in_ol:
+                        f.write('</ol>\n')
+                        in_ol = False
 
-            # Close the <ul> tag if the list has not been closed.
-            if in_list:
+            # Close list tags
+            if in_ul:
                 f.write('</ul>\n')
+            if in_ol:
+                f.write('</ol>\n')
 
     except IOError as e:
         print(f"Error: {e}", file=sys.stderr)
