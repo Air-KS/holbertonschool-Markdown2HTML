@@ -34,27 +34,31 @@ def markdown_to_html(md_file, html_file):
     md_file: path to the Markdown file to convert.
     html_file: path to the output HTML file.
     """
-    with open(md_file, 'r') as f:
-        lines = f.readlines(0)
+    try:
+        with open(md_file, 'r') as f:
+            lines = f.readlines(0)
 
-    with open(html_file, 'w') as f:
-        """
-        Opens the HTML file for writing.
-        Any existing content will be replaced.
-        """
+        with open(html_file, 'w') as f:
+            """
+            Opens the HTML file for writing.
+            Any existing content will be replaced.
+            """
 
-        for index in lines:
-            index = index.strip()
+            for index in lines:
+                index = index.strip()
 
-            if index.startswith('#'):
-                """
-                If the line is a Markdown title
-                (starts with '#'), convert.
-                """
-                level = index.count('#')
-                heading = index.strip('#').strip()
-                html_heading = f'<h{level}>{heading}</h{level}>'
-                f.write(html_heading + '\n')
+                if index.startswith('#'):
+                    """
+                    If the line is a Markdown title
+                    (starts with '#'), convert.
+                    """
+                    level = index.count('#')
+                    heading = index.strip('#').strip()
+                    html_heading = f'<h{level}>{heading}</h{level}>'
+                    f.write(html_heading + '\n')
+    except IOError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
