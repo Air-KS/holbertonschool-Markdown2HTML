@@ -7,9 +7,10 @@ import markdown
 
 
 def fileExist(argv):
-    """verify file
-
-    argv (str): 2 arguments string
+    """Verify if the necessary files exist and if the correct number of arguments are provided.
+    
+    Args: argv (list of str): Command line arguments where argv[1] is the source Markdown file
+                         and argv[2] is the destination HTML file.
     """
     if len(argv) < 3:
         print("Usage: ./markdown2html.py README.md README.html",
