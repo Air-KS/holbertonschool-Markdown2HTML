@@ -27,11 +27,12 @@ def markdown_to_html(md_file, html_file):
             in_ul = False
             in_ol = False
             in_para = False
-            
+
             for index in range(len(lines)):
                 line = lines[index].rstrip("\n")
-                next_line = lines[index + 1].rstrip("\n") if index + 1 < len(lines) else ''
-                
+                next_line = (
+                    lines[index + 1].rstrip("\n")
+                    if index + 1 < len(lines) else '')
                 # Closing tags if needed before starting new ones
                 if line.startswith(('#', '-', '*')) and in_para:
                     f.write('</p>\n')
@@ -42,7 +43,7 @@ def markdown_to_html(md_file, html_file):
                 if line.startswith(('#', '')) and in_ol:
                     f.write('</ol>\n')
                     in_ol = False
-                
+
                 # Processing lines
                 if line.startswith('#'):
                     level = line.count('#')
